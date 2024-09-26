@@ -7,7 +7,6 @@ This project is a Node.js HTTP server  and Socket.io server built with Express a
 - **Hexagonal Architecture**: Organized code into distinct layers for better maintainability and scalability.
 - **Awilix**: Dependency Injection container for managing application dependencies.
 - **Redis(BullMQ)**: Message broker for asynchronous communication with a WebSocket service.
-- **Jest**: Testing framework for unit testing.
 - **Winston & Morgan**: Extensive Logging
 
 
@@ -78,7 +77,7 @@ cp ./ws_server/.env.example ./ws_server/.env
 
  EXPRESS_APP_REDIS_URL= The connection uri to the message queue(Rabbit MQ) used by this server for asynchronous inter-service communication with the Websocket server 
  
- EXPRESS_APP_MESSAGE_QUEUE_NAME_WEBSOCKET_SERVICE=The queue name that binds this server and the websocket server together, this server sends to this queue, while the WS server consumes from it
+ EXPRESS_APP_MESSAGE_QUEUE_NAME_WEBSOCKET_SERVICE=The queue name that binds this HTTP server and this server together, this HTTP server sends to this queue, while this server consumes from it with the aid of BullMQ
 
  
  
@@ -110,8 +109,7 @@ https://documenter.getpostman.com/view/16065705/2sAXqy1djb
 
 
 Socket.IO Server
-Below is an example using socket.io client 
-given http://localhost:5000 is the base url of the socket.io server
+Below is an example using socket.io client, given http://localhost:5000 is the base url of the socket.io server
 ```
 const socket = io.connect('http://localhost:5000/socket.io', {
                auth: {
