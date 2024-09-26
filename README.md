@@ -36,11 +36,11 @@ cd betting_app_backend_
 1. **Set up environmental variables**
 
 ```
-cp ./http_server/.env.example .env
+cp ./http_server/.env.example ./http_server/.env
 ```
 
 ```
-cp ./ws_server/.env.example .env
+cp ./ws_server/.env.example ./ws_server/.env
 ```
 
  Update the .env file with your local configuration values.
