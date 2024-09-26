@@ -57,13 +57,15 @@ cp ./ws_server/.env.example ./ws_server/.env
  
  EXPRESS_APP_PRIVATE_ENDPOINT_SECRET_KEY=The private secret key of this server for synchronous inter-service communication from the Websocket server
 
- EXPRESS_APP_REDIS_URL= The connection uri to the message queue(Rabbit MQ) used by this server for asynchronous inter-service communication with the Websocket server 
+ EXPRESS_APP_REDIS_URL= The connection uri to the message queue(Redis) used by this server for asynchronous inter-service communication with the Websocket server 
  
  EXPRESS_APP_MESSAGE_QUEUE_NAME_WEBSOCKET_SERVICE=The queue name that binds this server and the websocket server together, this server sends to this queue, while the WS server consumes from it
  
  EXPRESS_APP_ACTIVE_GAMES_COUNT = The no of active games to show on the dashboard
  
  EXPRESS_APP_GAME_DURATION_IN_MINUTES = The duration in minutes of a game
+ 
+ EXPRESS_APP_USE_REALISTIC_EVENT_GENERATION_MODE = What it is set to True, a game last for 90 mins and the event generation becomes more realistic, However when set to False, event generation becomes very spontaneous and a game duration will be either 10 or the value assigned to EXPRESS_APP_GAME_DURATION_IN_MINUTES variable.
  
  
  
@@ -75,7 +77,7 @@ cp ./ws_server/.env.example ./ws_server/.env
 
  EXPRESS_APP_HTTP_SERVER_BASE_URL=The base endpoint url of the HTTP server
 
- EXPRESS_APP_REDIS_URL= The connection uri to the message queue(Rabbit MQ) used by this server for asynchronous inter-service communication with the Websocket server 
+ EXPRESS_APP_REDIS_URL= The connection uri to the message queue(Redis) used by this server for asynchronous inter-service communication with the Websocket server 
  
  EXPRESS_APP_MESSAGE_QUEUE_NAME_WEBSOCKET_SERVICE=The queue name that binds this HTTP server and this server together, this HTTP server sends to this queue, while this server consumes from it with the aid of BullMQ
 
