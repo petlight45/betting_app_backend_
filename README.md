@@ -110,5 +110,22 @@ https://documenter.getpostman.com/view/16065705/2sAXqy1djb
 
 
 Socket.IO Server
+Below is an example using socket.io client 
+given http://localhost:5000 is the base url of the socket.io server
+```
+const socket = io.connect('http://localhost:5000/socket.io', {
+               auth: {
+                 token: {{accessToken}}
+               });
 
-https://documenter.getpostman.com/view/16065705/2sAXqy1djb
+// Subscribe to leaderboard events
+socket.emit('leaderboard-event-subscribe', {});
+
+// Subscribe to a specific game
+socket.emit('game-subscribe', { gameId: '66f5889f0ad0b9fb348510af' });
+
+// Listen for game events
+socket.on('game-event-subscribe', (data) => {
+  console.log('Game event received:', data);
+});
+```
