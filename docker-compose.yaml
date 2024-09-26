@@ -3,7 +3,7 @@ services:
   app: &app_base
     build:
       context: ./http_server
-      dockerfile: ./http_server/devops/docker/node/Dockerfile
+      dockerfile: ./devops/docker/node/Dockerfile
     image: backend_http:latest
     command: bash -c "/wait && npm start"
     environment:
@@ -20,7 +20,7 @@ services:
   app_ws:
     build:
       context: ./ws_server
-      dockerfile: ./ws_server/devops/docker/node/Dockerfile
+      dockerfile: ./devops/docker/node/Dockerfile
     image: backend_ws:latest
     command: bash -c "npm start"
     env_file:
