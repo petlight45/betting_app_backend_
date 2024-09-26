@@ -298,7 +298,6 @@ export default class GameService {
                 }
             });
         }
-        console.log(homeScore, awayScore, "after game")
         // @ts-ignore
         const userBets = await this.getBets(id)
         if (userBets) {
