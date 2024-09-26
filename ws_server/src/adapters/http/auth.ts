@@ -19,6 +19,7 @@ export class AuthServiceAdapter implements AuthServicePort {
     }
 
     async authenticate(token: string): Promise<AuthUserDetails | null> {
+        console.log(this.endpoint_url, token, "ddddddddddddddddddddddddddd")
         const response = await axios.post(this.endpoint_url, {
             "access_token": token
         }, {
