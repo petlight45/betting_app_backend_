@@ -25,11 +25,11 @@ To get started with this project, follow these steps:
 1. **Clone the Repository**
 
 ```
-git clone https://github.com/petlight45/http_server_betting_app.git
+git clone https://github.com/petlight45/betting_app_backend_.git
 ```
 2. **Change directory 
 ```
-cd betting_app_backend
+cd betting_app_backend_
 ```
 ## Configuration
    

@@ -42,7 +42,7 @@ services:
     <<: *app_base
     command: bash -c "/wait && npm run worker_live"
     ports:
-      - 5001:5000
+      - 5002:5000
     volumes:
       - ../logs/betting-app/worker/:/app/logs
   mongodb:
