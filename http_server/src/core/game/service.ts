@@ -11,6 +11,7 @@ import {WebsocketPayloadDataType} from "../../ports/ws/data_types";
 import WSDispatcher from "../../ports/ws/dispatcher";
 import CustomException from "../../ports/helpers/exceptions/custom_exception";
 import {HTTPResponseStatusCode} from "../../ports/helpers/definitions/response";
+import {DateTimeHelpers} from "../../ports/helpers/commons/date_time";
 
 type GameServiceParams = {
     gameRepository: any;
@@ -79,54 +80,57 @@ export default class GameService {
     }
 
     async generateNewEvent(id: string): Promise<GameEvent | void> {
-        // let cachedGameData: Game = await this.cache.getValue(id)
-        // if (!cachedGameData) {
-        //     const gameRes = await this.fetchSingleGame(id)
-        //     await this.cache.setValue(id, gameRes)
-        //     cachedGameData = gameRes
-        // }
-        // let minute = DateTimeHelpers.computeSecondsBetweenStartEndTime(cachedGameData.startedAt as Date) / 60
-        // // Goal probability increases toward the end of each half
-        // const goalProbability = minute > 80 ? 0.1 : minute > 40 ? 0.05 : 0.02;
-        // // Red card probability increases in the second half
-        // const redCardProbability = minute > 60 ? 0.01 : 0.003;
-        // // Substitution probability is higher after halftime
-        // const substitutionProbability = minute > 45 ? 0.07 : 0.01;
-        // // Yellow card probability increases after 15 minutes and more after 60 minutes
-        // const yellowCardProbability = minute > 60 ? 0.05 : minute > 15 ? 0.02 : 0.005;
-        // const rand = Math.random();
-        // let eventType;
-        // let eventTeam = Math.random() < 0.5 ? GameEventTeamEnum.HOME : GameEventTeamEnum.AWAY;
-        // let eventPlayer;
-        // if (rand < goalProbability) {
-        //     eventType = GameEventTypeEnum.GOAL;
-        // } else if (rand < goalProbability + redCardProbability) {
-        //     eventType = GameEventTypeEnum.RED_CARD;
-        // } else if (rand < goalProbability + redCardProbability + substitutionProbability) {
-        //     eventType = GameEventTypeEnum.SUBSTITUTION;
-        // } else if (rand < goalProbability + redCardProbability + substitutionProbability + yellowCardProbability) {
-        //     eventType = GameEventTypeEnum.YELLOW_CARD
-        // }
-        // // @ts-ignore
-        // if (eventType) {
-        //     const game: Game = new Game(await this.fetchSingleGame(id))
-        //     const mockEvent: Partial<GameEventParams> = game.generate_new_event({type: eventType, team: eventTeam})
-        //     const event: GameEvent = await this.gameEventService.createGameEvent(mockEvent as GameEventParams)
-        //     if (game.isOngoing) {
-        //         await this.cache.setValue(event._id as string, event)
-        //         await this.cache.addKeyToSet(event._id as string, game.cache_set_key_events)
-        //     }
-        //     return event
-        // }
-        if (Math.random() < 0.5) {
-            const game: Game = new Game(await this.fetchSingleGame(id))
-            const mockEvent: Partial<GameEventParams> = game.generate_new_event()
-            const event: GameEvent = await this.gameEventService.createGameEvent(mockEvent as GameEventParams)
-            if (game.isOngoing) {
-                await this.cache.setValue(event._id as string, event)
-                await this.cache.addKeyToSet(event._id as string, game.cache_set_key_events)
+        if (this.appConfig.USE_REALISTIC_EVENT_GENERATION_MODE) {
+            let cachedGameData: Game = await this.cache.getValue(id)
+            if (!cachedGameData) {
+                const gameRes = await this.fetchSingleGame(id)
+                await this.cache.setValue(id, gameRes)
+                cachedGameData = gameRes
             }
-            return event
+            let minute = DateTimeHelpers.computeSecondsBetweenStartEndTime(cachedGameData.startedAt as Date) / 60
+            // Goal probability increases toward the end of each half
+            const goalProbability = minute > 80 ? 0.1 : minute > 40 ? 0.05 : 0.02;
+            // Red card probability increases in the second half
+            const redCardProbability = minute > 60 ? 0.01 : 0.003;
+            // Substitution probability is higher after halftime
+            const substitutionProbability = minute > 45 ? 0.07 : 0.01;
+            // Yellow card probability increases after 15 minutes and more after 60 minutes
+            const yellowCardProbability = minute > 60 ? 0.05 : minute > 15 ? 0.02 : 0.005;
+            const rand = Math.random();
+            let eventType;
+            let eventTeam = Math.random() < 0.5 ? GameEventTeamEnum.HOME : GameEventTeamEnum.AWAY;
+            let eventPlayer;
+            if (rand < goalProbability) {
+                eventType = GameEventTypeEnum.GOAL;
+            } else if (rand < goalProbability + redCardProbability) {
+                eventType = GameEventTypeEnum.RED_CARD;
+            } else if (rand < goalProbability + redCardProbability + substitutionProbability) {
+                eventType = GameEventTypeEnum.SUBSTITUTION;
+            } else if (rand < goalProbability + redCardProbability + substitutionProbability + yellowCardProbability) {
+                eventType = GameEventTypeEnum.YELLOW_CARD
+            }
+            // @ts-ignore
+            if (eventType) {
+                const game: Game = new Game(await this.fetchSingleGame(id))
+                const mockEvent: Partial<GameEventParams> = game.generate_new_event({type: eventType, team: eventTeam})
+                const event: GameEvent = await this.gameEventService.createGameEvent(mockEvent as GameEventParams)
+                if (game.isOngoing) {
+                    await this.cache.setValue(event._id as string, event)
+                    await this.cache.addKeyToSet(event._id as string, game.cache_set_key_events)
+                }
+                return event
+            }
+        } else {
+            if (Math.random() < 0.5) {
+                const game: Game = new Game(await this.fetchSingleGame(id))
+                const mockEvent: Partial<GameEventParams> = game.generate_new_event()
+                const event: GameEvent = await this.gameEventService.createGameEvent(mockEvent as GameEventParams)
+                if (game.isOngoing) {
+                    await this.cache.setValue(event._id as string, event)
+                    await this.cache.addKeyToSet(event._id as string, game.cache_set_key_events)
+                }
+                return event
+            }
         }
 
     }

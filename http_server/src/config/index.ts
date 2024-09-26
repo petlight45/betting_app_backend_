@@ -48,7 +48,16 @@ export default class AppConfig {
     }
 
     static get GAME_DURATION_IN_MINUTES(): number {
-        return Number.parseInt(process.env.EXPRESS_APP_GAME_DURATION_IN_MINUTES || '10')
+        const useRealisticMode = AppConfig.USE_REALISTIC_EVENT_GENERATION_MODE
+        if (useRealisticMode) {
+            return 90
+        } else {
+            return Number.parseInt(process.env.EXPRESS_APP_GAME_DURATION_IN_MINUTES || '10')
+        }
+    }
+
+    static get USE_REALISTIC_EVENT_GENERATION_MODE(): boolean {
+        return (process.env.EXPRESS_APP_USE_REALISTIC_EVENT_GENERATION_MODE || 'False').trim().toLowerCase() === "true"
     }
 
 }
