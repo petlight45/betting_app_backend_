@@ -10,7 +10,7 @@ services:
       WAIT_HOSTS: mongodb:27017,redis:6379
       WAIT_TIMEOUT: 60
     env_file:
-      - .env
+      - ./http_server/.env
     ports:
       - 5000:5000
     depends_on:
@@ -24,7 +24,7 @@ services:
     image: backend_ws:latest
     command: bash -c "npm start"
     env_file:
-      - .env
+      - ./ws_server/.env
     ports:
       - 5001:5000
     volumes:
