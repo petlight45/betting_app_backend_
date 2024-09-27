@@ -30,21 +30,27 @@ export const clientSocketEventHandler = (
             socket.on('leaderboard-event-subscribe', (data, callback) => {
                 logger.info(`Received user message from ${socket.id}: ${JSON.stringify(data)} leaderboard-event-subscribe`);
                 notificationPort.handleClientJoinRoom(socket, notificationRoom.leaderboardUpdate())
-                callback({status: 'ok', message: 'Leaderboard event subscription successful'});
+                if (callback) {
+                    callback({status: 'ok', message: 'Leaderboard event subscription successful'});
+                }
             });
 
             socket.on('game-event-subscribe', (data, callback) => {
                 logger.info(`Received user message from ${socket.id}: ${JSON.stringify(data)} game-event-subscribe`);
                 const {gameId} = data;
                 notificationPort.handleClientJoinRoom(socket, notificationRoom.gameEventUpdate(gameId))
-                callback({status: 'ok', message: `Game ${gameId} event subscription successful`});
+                if (callback) {
+                    callback({status: 'ok', message: `Game ${gameId} event subscription successful`});
+                }
             });
 
             socket.on('game-subscribe', (data, callback) => {
                 logger.info(`Received user message from ${socket.id}: ${JSON.stringify(data)} game-subscribe`);
                 const {gameId} = data;
                 notificationPort.handleClientJoinRoom(socket, notificationRoom.gameUpdate(gameId))
-                callback({status: 'ok', message: `Game ${gameId} subscription successful`});
+                if (callback) {
+                    callback({status: 'ok', message: `Game ${gameId} subscription successful`});
+                }
             });
         } else {
             logger.error("Authentication Failed")
