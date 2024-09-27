@@ -4,9 +4,11 @@ import {WebsocketPayloadDataType} from "./core/usecases/data_types";
 import {NotifyEvents} from "./core/usecases/notify_events";
 import {BGWorkerEventsHandler} from "./core/ports/bg_jobs/worker";
 import {CachePort} from "./core/ports/cache";
+import {logger, serverPort} from "./app";
 
 
 export const startWorker = (redisClient: CachePort, appConfig: any, logger: LoggerPort, notifyEvent: NotifyEvents) => {
+    logger.info(`BG Worker started`)
     // Worker for receiving event from HTTP server over a message queue
     BGWorkerEventsHandler(new Worker(appConfig.MESSAGE_QUEUE_NAME_WEBSOCKET_SERVICE, async job => {
         logger.info(`Processing job ${job.id}: ${job.name} -> ${JSON.stringify(job.data)}`);

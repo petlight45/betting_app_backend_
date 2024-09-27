@@ -14,6 +14,10 @@ COPY . .
 # Build the app
 RUN npm run build
 
+## Instaling wait package
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
 # Expose the port on which the app will run
 EXPOSE 5000
 
